@@ -98,7 +98,7 @@ def get_ai_response(model_selection, chat_history, system_instruction_text):
     except Exception as e:
         # Check if it's a 502 error
         error_msg = str(e)
-        if "502" in error_msg or "Bad Gateway" in error_msg:
+        if "Error" in error_msg or "Bad Gateway" in error_msg:
             st.warning("Gemini is currently unavailable (502). Switching to ChatGPT 5.2 fallback...")
 
             try:
