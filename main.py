@@ -194,7 +194,7 @@ with st.sidebar:
         with st.sidebar:
             st.markdown("---")
             # Only shows if you check this box
-            dev_mode = st.checkbox("Developer Settings", value=False)
+            dev_mode = st.checkbox("Developer Settings", value=False, disabled=True)
 
             if dev_mode:
                 selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
