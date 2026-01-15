@@ -75,8 +75,10 @@ def save_to_firebase(user_id, model_name, prompt_, full_response, interaction_ty
 
 
 def get_ai_response(model_selection, chat_history, system_instruction_text):
+    simulate_502 = True
     try:
-        # --- PRIMARY: Google Gemini ---
+        if simulate_502:
+            raise Exception("502 Bad Gateway: Simulated Server Error")
         client = genai.Client(api_key=st.secrets["api_keys"]["google"])
         api_contents = [
             types.Content(
@@ -98,7 +100,7 @@ def get_ai_response(model_selection, chat_history, system_instruction_text):
     except Exception as e:
         # Check if it's a 502 error
         error_msg = str(e)
-        if "Error" in error_msg or "Bad Gateway" in error_msg:
+        if "502" in error_msg or "Bad Gateway" in error_msg:
             st.warning("Gemini is currently unavailable (502). Switching to ChatGPT 5.2 fallback...")
 
             try:
