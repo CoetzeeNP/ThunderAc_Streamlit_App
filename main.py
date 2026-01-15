@@ -14,13 +14,13 @@ MODEL_MAPPING = {
     "ChatGPT 5.2": "gpt-5.2-thinking"
 }
 
-AUTHORIZED_STUDENT_IDS = ["12345", "67890", "24680", "13579", "99999", ""]
+AUTHORIZED_STUDENT_IDS = ["Thunder"]
 
 header_container = st.container()
 with header_container:
     st.image("combined_logo.jpg", width="stretch")
 
-st.title("AiFrikaans Assistant")
+st.title("Business Planning Assistant")
 
 st.set_page_config(layout="wide")
 
@@ -153,7 +153,7 @@ def handle_feedback(understood: bool):
         st.session_state["feedback_pending"] = False
 
 with st.sidebar:
-    st.header("Afrikaans Assistant Menu")
+    st.header("Business Planning Assistant Menu")
     st.write(f"**Logged in as:** {st.session_state['current_user']}")
     if not st.session_state["authenticated"]:
         u_id = st.text_input("Enter Student ID", type="password")
@@ -198,11 +198,11 @@ with st.sidebar:
             if dev_mode:
                 selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
                 system_instruction_input = st.text_area("System Message",
-                                                        "You are an Afrikaans tutor. Use STOMPI rules.")
+                                                        "Business Planning Assistant")
             else:
                 # Default values when hidden
                 selected_label = "gemini-3-pro-preview"
-                system_instruction_input = "You are an Afrikaans tutor. Use STOMPI rules."
+                system_instruction_input = "Business Planning Assistant"
 
 
 
@@ -212,7 +212,7 @@ with st.sidebar:
 if not st.session_state["authenticated"]:
     st.warning("Please login with an authorized Student ID in the sidebar.")
     with st.container():
-        st.markdown("### You need to be signed in to get access to the Afrikaans Assistant!")
+        st.markdown("### You need to be signed in to get access to the Business Planning Assistant")
         st.info("Additional dashboard features will appear here once you are verified.")
 else:
     st.info("You are welcome to start chatting with the Assistant using the text box below!")
@@ -221,7 +221,7 @@ else:
     # This loop renders previous messages in bounded boxes
     for msg in st.session_state["messages"]:
         is_user = msg["role"] == "user"
-        label = st.session_state["current_user"] if is_user else "Afrikaans AI Assistant"
+        label = st.session_state["current_user"] if is_user else "Business Planning Assistant"
 
         # Remove the avatar parameter completely to use defaults/cleaner look
         with st.chat_message(msg["role"]):
@@ -231,7 +231,7 @@ else:
 
     # 2. CHAT INPUT
     input_placeholder = "Please give feedback on the last answer..." if st.session_state[
-        "feedback_pending"] else "Ask your Afrikaans question..."
+        "feedback_pending"] else "Ask your question here..."
     prompt = st.chat_input(input_placeholder, disabled=st.session_state["feedback_pending"])
 
     if prompt:
@@ -247,7 +247,7 @@ else:
         # Remove avatar parameter here as well
         with st.chat_message("assistant"):
             with st.container(border=True):
-                st.markdown("**Afrikaans AI Assistant:**")
+                st.markdown("**Business Planning Assistant:**")
                 with st.spinner("Besig om te dink..."):
                     reply = get_ai_response(selected_label, st.session_state["messages"], system_instruction_input)
                     st.markdown(reply)
