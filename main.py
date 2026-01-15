@@ -153,6 +153,7 @@ def handle_feedback(understood: bool):
         st.session_state["feedback_pending"] = False
 
 with st.sidebar:
+    st.image("icdf.png", width="stretch")
     st.header("Business Planning Assistant Menu")
     st.write(f"**Logged in as:** {st.session_state['current_user']}")
     if not st.session_state["authenticated"]:
