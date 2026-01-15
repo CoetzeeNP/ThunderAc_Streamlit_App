@@ -75,7 +75,7 @@ def save_to_firebase(user_id, model_name, prompt_, full_response, interaction_ty
 
 
 def get_ai_response(model_selection, chat_history, system_instruction_text):
-    simulate_502 = True
+    simulate_502 = false
     try:
         if simulate_502:
             raise Exception("502 Bad Gateway: Simulated Server Error")
