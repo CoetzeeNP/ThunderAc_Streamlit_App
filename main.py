@@ -75,10 +75,8 @@ def save_to_firebase(user_id, model_name, prompt_, full_response, interaction_ty
 
 
 def get_ai_response(model_selection, chat_history, system_instruction_text):
-    simulate_502 = False
     try:
-        if simulate_502:
-            raise Exception("502 Bad Gateway: Simulated Server Error")
+        # --- PRIMARY: Google Gemini ---
         client = genai.Client(api_key=st.secrets["api_keys"]["google"])
         api_contents = [
             types.Content(
