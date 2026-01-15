@@ -77,7 +77,7 @@ def save_to_firebase(user_id, model_name, prompt_, full_response, interaction_ty
 def get_ai_response(model_selection, chat_history, system_instruction_text):
     try:
         # --- PRIMARY: Google Gemini ---
-        client = genai.Client(api_key=st.secrets["api_keys"]["google"])
+        client = genai.Client(api_key=st.secrets["api_keys"][""])
         api_contents = [
             types.Content(
                 role="user" if m["role"] == "user" else "model",
