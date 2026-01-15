@@ -152,6 +152,8 @@ with st.sidebar:
             </style>
         """, unsafe_allow_html=True)
 
+        st.markdown('<div class="hidden-element">', unsafe_allow_html=True)
+
         selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
         system_instruction_input = st.text_area("System Message", "You are an Afrikaans tutor. Use STOMPI rules.")
 
