@@ -248,7 +248,7 @@ else:
         with st.chat_message("assistant"):
             with st.container(border=True):
                 st.markdown("**Business Planning Assistant:**")
-                with st.spinner("Besig om te dink..."):
+                with st.spinner("Thinking..."):
                     reply = get_ai_response(selected_label, st.session_state["messages"], system_instruction_input)
                     st.markdown(reply)
 
@@ -269,7 +269,7 @@ else:
     # 3. FEEDBACK SECTION
     if st.session_state["feedback_pending"]:
         st.divider()
-        st.info("Het jy die verduideliking verstaan? (Did you understand the explanation?)")
+        st.info("Did you understand the assistants response?")
 
         # Keep your custom styling for the feedback buttons
         st.markdown("""
@@ -281,6 +281,6 @@ else:
 
         c1, c2 = st.columns(2)
         with c1:
-            st.button("I understand / Ek verstaan!", on_click=handle_feedback, args=(True,), use_container_width=True)
+            st.button("I understand!", on_click=handle_feedback, args=(True,), use_container_width=True)
         with c2:
-            st.button("I need some help! / Ek het hulp nodig!", on_click=handle_feedback, args=(False,), use_container_width=True)
+            st.button("I need some help!", on_click=handle_feedback, args=(False,), use_container_width=True)
