@@ -10,10 +10,9 @@ import re
 SHEET_NAME = "Gemini Logs"
 MODEL_MAPPING = {
     "gemini-3-pro-preview": "gemini-3-pro-preview",
-
 }
 
-AUTHORIZED_STUDENT_IDS = ["12345", "67890", "24680", "13579", "99999", ""]
+AUTHORIZED_STUDENT_IDS = ["12345", "67890", "24680", "13579", "99999"]
 
 header_container = st.container()
 with header_container:
@@ -145,11 +144,18 @@ with st.sidebar:
             st.rerun()
         # -----------------------------
 
-        st.markdown("---")
+        st.markdown("""
+            <style>
+            .hidden-element {
+                display: none;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+
         selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
         system_instruction_input = st.text_area("System Message", "You are an Afrikaans tutor. Use STOMPI rules.")
 
-
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 
