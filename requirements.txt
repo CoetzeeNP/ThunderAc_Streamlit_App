@@ -1,6 +1,7 @@
 streamlit
 google-genai
 #gspread
+openai
 google-auth
 pillow
 firebase-admin

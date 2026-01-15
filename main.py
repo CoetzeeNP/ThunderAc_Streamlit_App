@@ -4,15 +4,17 @@ from firebase_admin import credentials, db
 from datetime import datetime
 from google import genai
 from google.genai import types
+from openai import OpenAI as OpenAIClient
 import html
 import re
 
 SHEET_NAME = "Gemini Logs"
 MODEL_MAPPING = {
     "gemini-3-pro-preview": "gemini-3-pro-preview",
+    "ChatGPT 5.2": "gpt-5.2-thinking"
 }
 
-AUTHORIZED_STUDENT_IDS = ["12345", "67890", "24680", "13579", "99999"]
+AUTHORIZED_STUDENT_IDS = ["12345", "67890", "24680", "13579", "99999", ""]
 
 header_container = st.container()
 with header_container:
@@ -71,13 +73,57 @@ def save_to_firebase(user_id, model_name, prompt_, full_response, interaction_ty
             st.error(f"Firebase Logging error: {e}")
             return False
 
+
 def get_ai_response(model_selection, chat_history, system_instruction_text):
     try:
+        # --- PRIMARY: Google Gemini ---
         client = genai.Client(api_key=st.secrets["api_keys"]["google"])
-        api_contents = [types.Content(role="user" if m["role"]=="user" else "model", parts=[types.Part.from_text(text=m["content"])]) for m in chat_history]
-        response = client.models.generate_content(model=MODEL_MAPPING[model_selection], contents=api_contents, config=types.GenerateContentConfig(temperature=0.7, system_instruction=system_instruction_text))
+        api_contents = [
+            types.Content(
+                role="user" if m["role"] == "user" else "model",
+                parts=[types.Part.from_text(text=m["content"])]
+            ) for m in chat_history
+        ]
+
+        response = client.models.generate_content(
+            model=MODEL_MAPPING[model_selection],
+            contents=api_contents,
+            config=types.GenerateContentConfig(
+                temperature=0.7,
+                system_instruction=system_instruction_text
+            )
+        )
         return response.text
-    except Exception as e: return f"Error: {str(e)}"
+
+    except Exception as e:
+        # Check if it's a 502 error
+        error_msg = str(e)
+        if "502" in error_msg or "Bad Gateway" in error_msg:
+            st.warning("Gemini is currently unavailable (502). Switching to ChatGPT 5.2 fallback...")
+
+            try:
+                # --- FALLBACK: ChatGPT 5.2 ---
+                # Note: Assuming 'gpt-5.2' is the model ID in the 2026 OpenAI API
+                oa_client = OpenAIClient(api_key=st.secrets["api_keys"]["openai"])
+
+                # Format history for OpenAI
+                oa_messages = [{"role": "system", "content": system_instruction_text}]
+                for m in chat_history:
+                    role = "assistant" if m["role"] == "model" else m["role"]
+                    oa_messages.append({"role": role, "content": m["content"]})
+
+                # Using the 2026 responses.create or chat.completions.create
+                fallback_response = oa_client.chat.completions.create(
+                    model="gpt-5.2",
+                    messages=oa_messages,
+                    temperature=0.7
+                )
+                return fallback_response.choices[0].message.content
+
+            except Exception as fallback_err:
+                return f"Both models failed. Gemini Error: {error_msg} | OpenAI Error: {str(fallback_err)}"
+
+        return f"Error: {error_msg}"
 
 
 if "messages" not in st.session_state: st.session_state["messages"] = []
@@ -144,20 +190,21 @@ with st.sidebar:
             st.rerun()
         # -----------------------------
 
-        st.markdown("""
-            <style>
-            .hidden-element {
-                display: none;
-            }
-            </style>
-        """, unsafe_allow_html=True)
+        with st.sidebar:
+            st.markdown("---")
+            # Only shows if you check this box
+            dev_mode = st.checkbox("Developer Settings", value=False)
 
-        st.markdown('<div class="hidden-element">', unsafe_allow_html=True)
+            if dev_mode:
+                selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
+                system_instruction_input = st.text_area("System Message",
+                                                        "You are an Afrikaans tutor. Use STOMPI rules.")
+            else:
+                # Default values when hidden
+                selected_label = "gemini-3-pro-preview"
+                system_instruction_input = "You are an Afrikaans tutor. Use STOMPI rules."
 
-        selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
-        system_instruction_input = st.text_area("System Message", "You are an Afrikaans tutor. Use STOMPI rules.")
 
-        st.markdown('</div>', unsafe_allow_html=True)
 
 
 
