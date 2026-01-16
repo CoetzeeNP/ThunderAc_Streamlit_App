@@ -14,7 +14,8 @@ MODEL_MAPPING = {
     "ChatGPT 5.2": "gpt-5.2-thinking"
 }
 
-AUTHORIZED_STUDENT_IDS = ["Thunder"]
+AUTHORIZED_STUDENT_IDS = st.secrets["AUTHORIZED_STUDENT_LIST"]
+
 
 header_container = st.container()
 with header_container:
@@ -204,9 +205,6 @@ with st.sidebar:
                 # Default values when hidden
                 selected_label = "gemini-3-pro-preview"
                 system_instruction_input = "Business Planning Assistant"
-
-
-
 
 
 # Check if user is logged in
