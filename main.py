@@ -74,7 +74,6 @@ def save_to_firebase(user_id, model_name, prompt_, full_response, interaction_ty
             st.error(f"Firebase Logging error: {e}")
             return False
 
-
 def get_ai_response(model_selection, chat_history, system_instruction_text):
     try:
         # --- PRIMARY: Google Gemini ---
