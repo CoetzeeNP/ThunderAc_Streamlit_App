@@ -219,7 +219,7 @@ else:
     # This loop renders previous messages in bounded boxes
     for msg in st.session_state["messages"]:
         is_user = msg["role"] == "user"
-        label = st.session_state["current_user"] if is_user else "Business Planning Assistant"
+        label = st.session_state["current_user"] if is_user else "ThundAIrbird Assistant"
 
         # Remove the avatar parameter completely to use defaults/cleaner look
         with st.chat_message(msg["role"]):
