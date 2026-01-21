@@ -21,7 +21,7 @@ header_container = st.container()
 with header_container:
     st.image("combined_logo.jpg", width="stretch")
 
-st.title("ThunderAIrbird")
+st.title("ThundAIrbird")
 
 st.set_page_config(layout="wide")
 
@@ -154,7 +154,7 @@ def handle_feedback(understood: bool):
 
 with st.sidebar:
     st.image("icdf.png", width="stretch")
-    st.header("ThunderAIrbird Menu")
+    st.header("ThundAIrbird Menu")
     st.write(f"**Logged in as:** {st.session_state['current_user']}")
     if not st.session_state["authenticated"]:
         u_id = st.text_input("Enter Student ID", type="password")
@@ -199,11 +199,11 @@ with st.sidebar:
             if dev_mode:
                 selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
                 system_instruction_input = st.text_area("System Message",
-                                                        "You are called ThunderAIrbird and you are a Business Planning Assistant. All outputs need to be in South African Rands (R)")
+                                                        "You are called ThundAIrbird and you are a Business Planning Assistant. All outputs need to be in South African Rands (R)")
             else:
                 # Default values when hidden
                 selected_label = "gemini-3-pro-preview"
-                system_instruction_input = "You are called ThunderAIrbird and you are a Business Planning Assistant"
+                system_instruction_input = "You are called ThundAIrbird and you are a Business Planning Assistant"
 
 
 # Check if user is logged in
@@ -245,7 +245,7 @@ else:
         # Remove avatar parameter here as well
         with st.chat_message("assistant"):
             with st.container(border=True):
-                st.markdown("**ThunderAIrbird Assistant:**")
+                st.markdown("**ThundAIrbird Assistant:**")
                 with st.spinner("Thinking..."):
                     reply = get_ai_response(selected_label, st.session_state["messages"], system_instruction_input)
                     st.markdown(reply)
