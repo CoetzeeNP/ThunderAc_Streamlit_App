@@ -21,7 +21,7 @@ header_container = st.container()
 with header_container:
     st.image("combined_logo.jpg", width="stretch")
 
-st.title("Business Planning Assistant")
+st.title("ThunderAIrbird")
 
 st.set_page_config(layout="wide")
 
@@ -140,7 +140,7 @@ def handle_feedback(understood: bool):
     save_to_firebase(st.session_state["current_user"], selected_label, last_ai_reply, interaction, "FEEDBACK_EVENT")
 
     if not understood:
-        clarification_prompt = f"I don't understand the previous explanation: '{last_ai_reply}'. Please break it down further."
+        clarification_prompt = f"Please rephrase the previous explanation: '{last_ai_reply}'. Please break it down further."
         st.session_state["messages"].append({"role": "user", "content": clarification_prompt})
 
         ai_reply = get_ai_response(selected_label, st.session_state["messages"], system_instruction_input)
@@ -154,7 +154,7 @@ def handle_feedback(understood: bool):
 
 with st.sidebar:
     st.image("icdf.png", width="stretch")
-    st.header("Business Planning Assistant Menu")
+    st.header("ThunderAIrbird Menu")
     st.write(f"**Logged in as:** {st.session_state['current_user']}")
     if not st.session_state["authenticated"]:
         u_id = st.text_input("Enter Student ID", type="password")
@@ -199,11 +199,11 @@ with st.sidebar:
             if dev_mode:
                 selected_label = st.selectbox("AI Model", list(MODEL_MAPPING.keys()))
                 system_instruction_input = st.text_area("System Message",
-                                                        "Business Planning Assistant")
+                                                        "You are called ThunderAIrbird and you are a Business Planning Assistant. All outputs need to be in South African Rands (R)")
             else:
                 # Default values when hidden
                 selected_label = "gemini-3-pro-preview"
-                system_instruction_input = "Business Planning Assistant"
+                system_instruction_input = "You are called ThunderAIrbird and you are a Business Planning Assistant"
 
 
 # Check if user is logged in
@@ -245,7 +245,7 @@ else:
         # Remove avatar parameter here as well
         with st.chat_message("assistant"):
             with st.container(border=True):
-                st.markdown("**Business Planning Assistant:**")
+                st.markdown("**ThunderAIrbird Assistant:**")
                 with st.spinner("Thinking..."):
                     reply = get_ai_response(selected_label, st.session_state["messages"], system_instruction_input)
                     st.markdown(reply)
@@ -279,6 +279,6 @@ else:
 
         c1, c2 = st.columns(2)
         with c1:
-            st.button("I understand!", on_click=handle_feedback, args=(True,), use_container_width=True)
+            st.button("Ready to respond!", on_click=handle_feedback, args=(True,), use_container_width=True)
         with c2:
-            st.button("I need some help!", on_click=handle_feedback, args=(False,), use_container_width=True)
+            st.button("Please could you rephrase that!", on_click=handle_feedback, args=(False,), use_container_width=True)
